@@ -1,0 +1,227 @@
+PROJETO: Dashboard de Gestão de Solicitações de Testes de Laboratório
+
+Basear o sistema no template TailAdmin já instalado.
+
+OBJETIVO:
+Transformar o painel em um sistema corporativo para gerenciamento de solicitações de testes de laboratório, utilizando como fonte de dados uma Planilha Google (Google Sheets) já existente.
+
+VISUAL:
+
+* Manter o layout profissional do TailAdmin.
+* Utilizar identidade visual industrial/laboratório.
+* Design clean e executivo.
+* Responsivo para desktop e tablet.
+* Dashboard semelhante a sistemas ERP/MES corporativos.
+
+FONTE DE DADOS:
+Google Sheets.
+
+Colunas disponíveis:
+
+* Carimbo de data/hora
+* Data da Solicitação
+* Nº Solicitação
+* Nome do Solicitante
+* Nome do Cliente
+* Setor Solicitante
+* Descrição / Tipo de Equipamento
+* Código do Produto / Componente
+* Número de Série
+* Objetivo do Teste
+* Resultado Esperado
+* Motivo da Solicitação
+* Prioridade
+* Previsão de Devolutiva
+* Fotos do Equipamento
+* Documentos Complementares
+* Status
+* Responsável Técnico
+* Conclusão Técnica
+* Melhorias Identificadas
+* Data de Finalização
+
+MENU LATERAL:
+
+Dashboard
+Solicitações
+Kanban
+Calendário
+Relatórios
+Indicadores
+Configurações
+
+---
+
+TELA 1 - DASHBOARD EXECUTIVO
+
+Criar cards superiores:
+
+* Total de Solicitações
+* Em Análise
+* Em Teste
+* Finalizadas
+* Canceladas
+* Atrasadas
+
+Criar gráficos:
+
+1. Status das Solicitações
+   Tipo:
+   Donut Chart
+
+Campos:
+Status
+
+2. Solicitações por Setor
+   Tipo:
+   Bar Chart
+
+Campo:
+Setor Solicitante
+
+3. Solicitações por Prioridade
+   Tipo:
+   Bar Chart
+
+Campo:
+Prioridade
+
+4. Evolução Mensal
+   Tipo:
+   Line Chart
+
+Campo:
+Data da Solicitação
+
+5. Tempo Médio de Atendimento
+   Tipo:
+   KPI
+
+Diferença entre:
+Data da Solicitação
+e
+Data de Finalização
+
+---
+
+TELA 2 - LISTA DE SOLICITAÇÕES
+
+Tabela avançada contendo:
+
+Nº Solicitação
+Data Solicitação
+Cliente
+Solicitante
+Equipamento
+Código
+Prioridade
+Status
+Responsável Técnico
+Previsão de Devolutiva
+
+Funcionalidades:
+
+* Pesquisa
+* Ordenação
+* Filtros
+* Paginação
+* Exportar Excel
+* Exportar PDF
+
+---
+
+TELA 3 - KANBAN
+
+Criar quadro Kanban baseado na coluna Status.
+
+Colunas:
+
+Aberta
+Em análise
+Aguardando material
+Em teste
+Em elaboração do relatório
+Finalizada
+Cancelada
+
+Permitir mover cartões entre colunas.
+
+---
+
+TELA 4 - DETALHE DA SOLICITAÇÃO
+
+Ao clicar numa solicitação abrir página detalhada.
+
+Exibir:
+
+Todos os dados da linha.
+
+Mostrar:
+
+* Fotos do Equipamento
+* Documentos Complementares
+
+Exibir imagens em galeria.
+
+Exibir PDF quando houver.
+
+---
+
+TELA 5 - INDICADORES
+
+Criar:
+
+Top 10 Clientes
+Top 10 Equipamentos
+Top 10 Setores Solicitantes
+
+Tempo médio por responsável técnico.
+
+Quantidade de testes por mês.
+
+Taxa de finalização.
+
+Taxa de atraso.
+
+---
+
+CORES DOS STATUS
+
+Aberta:
+Azul
+
+Em análise:
+Amarelo
+
+Aguardando material:
+Laranja
+
+Em teste:
+Roxo
+
+Em elaboração do relatório:
+Ciano
+
+Finalizada:
+Verde
+
+Cancelada:
+Vermelho
+
+---
+
+INTEGRAÇÃO
+
+Criar serviço para consumir dados do Google Sheets.
+
+Atualização automática a cada 5 minutos.
+
+Utilizar cache local.
+
+Tratar erros de conexão.
+
+---
+
+OBJETIVO FINAL
+
+O resultado deve parecer um sistema corporativo profissional de gestão de laboratório industrial e não apenas um dashboard simples.

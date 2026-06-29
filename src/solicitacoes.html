@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Solicitações | LabControl</title>
+  </head>
+  <body
+    x-data="{ page: 'solicitacoes', loaded: true, darkMode: false, stickyMenu: false, sidebarToggle: true, scrollTop: false }"
+    x-init="darkMode = JSON.parse(localStorage.getItem('darkMode')); $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <include src="./partials/preloader.html"></include>
+    <div class="flex h-screen overflow-hidden">
+      <include src="./partials/sidebar.html"></include>
+      <div class="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
+        <include src="./partials/overlay.html" />
+        <include src="./partials/header.html" />
+        <main>
+          <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+
+            <!-- Page Header -->
+            <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Lista de Solicitações</h1>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Gerencie todas as solicitações de testes</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button id="btn-export-excel" class="flex items-center gap-1.5 rounded-lg border border-green-300 bg-green-50 px-3 py-2 text-sm font-medium text-green-700 hover:bg-green-100 dark:border-green-700 dark:bg-green-900/20 dark:text-green-400">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="fill-current"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 7V3.5L18.5 9H13zM8 17v-2h2v2H8zm0-4v-2h2v2H8zm4 4v-2h2v2h-2zm0-4v-2h2v2h-2z"/></svg>
+                  Excel
+                </button>
+                <button id="btn-export-pdf" class="flex items-center gap-1.5 rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-100 dark:border-red-700 dark:bg-red-900/20 dark:text-red-400">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="fill-current"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 7V3.5L18.5 9H13zm-2 5H9v-2h2v2zm0 4H9v-2h2v2zm4-4h-2v-2h2v2zm0 4h-2v-2h2v2z"/></svg>
+                  PDF
+                </button>
+              </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="mb-4 rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+                <div class="relative flex-1">
+                  <svg class="absolute left-3 top-1/2 -translate-y-1/2 fill-gray-400" width="16" height="16" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.04175 9.37363C3.04175 5.87693 5.87711 3.04199 9.37508 3.04199C12.8731 3.04199 15.7084 5.87693 15.7084 9.37363C15.7084 12.8703 12.8731 15.7053 9.37508 15.7053C5.87711 15.7053 3.04175 12.8703 3.04175 9.37363ZM9.37508 1.54199C5.04902 1.54199 1.54175 5.04817 1.54175 9.37363C1.54175 13.6991 5.04902 17.2053 9.37508 17.2053C11.2674 17.2053 13.003 16.5344 14.357 15.4176L17.177 18.238C17.4699 18.5309 17.9448 18.5309 18.2377 18.238C18.5306 17.9451 18.5306 17.4703 18.2377 17.1774L15.418 14.3573C16.5365 13.0033 17.2084 11.2669 17.2084 9.37363C17.2084 5.04817 13.7011 1.54199 9.37508 1.54199Z"/></svg>
+                  <input id="search-sol" type="text" placeholder="Buscar por Nº, cliente, equipamento, solicitante..." class="w-full rounded-lg border border-gray-200 bg-transparent py-2 pl-9 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:border-gray-700 dark:text-white dark:placeholder:text-gray-500" />
+                </div>
+                <select id="filter-status" class="rounded-lg border border-gray-200 bg-transparent py-2 px-3 text-sm text-gray-700 focus:border-blue-400 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                  <option value="">Todos os status</option>
+                  <option>Aberta</option>
+                  <option>Em análise</option>
+                  <option>Aguardando material</option>
+                  <option>Em teste</option>
+                  <option>Em elaboração do relatório</option>
+                  <option>Finalizada</option>
+                  <option>Cancelada</option>
+                </select>
+                <select id="filter-prioridade" class="rounded-lg border border-gray-200 bg-transparent py-2 px-3 text-sm text-gray-700 focus:border-blue-400 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                  <option value="">Todas as prioridades</option>
+                  <option>Urgente</option>
+                  <option>Alta</option>
+                  <option>Média</option>
+                  <option>Baixa</option>
+                </select>
+                <button id="btn-limpar-filtros" class="rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-500 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800">Limpar</button>
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+              <div class="flex items-center justify-between px-5 py-3 border-b border-gray-100 dark:border-gray-800">
+                <span id="table-count" class="text-sm text-gray-500 dark:text-gray-400"></span>
+                <div class="flex items-center gap-2">
+                  <span class="text-sm text-gray-500">Página</span>
+                  <span id="page-info" class="text-sm font-medium text-gray-700 dark:text-gray-300"></span>
+                </div>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead>
+                    <tr class="border-b border-gray-100 dark:border-gray-800">
+                      <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase cursor-pointer hover:text-gray-700" data-col="nSolicitacao">Nº Sol.</th>
+                      <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase cursor-pointer hover:text-gray-700" data-col="datasolicitacao">Data</th>
+                      <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase cursor-pointer hover:text-gray-700" data-col="cliente">Cliente</th>
+                      <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase cursor-pointer hover:text-gray-700" data-col="solicitante">Solicitante</th>
+                      <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase cursor-pointer hover:text-gray-700" data-col="equipamento">Equipamento</th>
+                      <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Código</th>
+                      <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase cursor-pointer hover:text-gray-700" data-col="prioridade">Prioridade</th>
+                      <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase cursor-pointer hover:text-gray-700" data-col="status">Status</th>
+                      <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Responsável</th>
+                      <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase cursor-pointer hover:text-gray-700" data-col="previsao">Previsão</th>
+                    </tr>
+                  </thead>
+                  <tbody id="table-sol">
+                    <tr><td colspan="10" class="px-5 py-8 text-center text-gray-400">Carregando...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Pagination -->
+              <div class="flex items-center justify-between px-5 py-3 border-t border-gray-100 dark:border-gray-800">
+                <button id="btn-prev" class="flex items-center gap-1 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-40 dark:border-gray-700 dark:text-gray-400">← Anterior</button>
+                <div id="pagination-pages" class="flex gap-1"></div>
+                <button id="btn-next" class="flex items-center gap-1 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-40 dark:border-gray-700 dark:text-gray-400">Próximo →</button>
+              </div>
+            </div>
+
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div id="modal-detalhe" class="hidden fixed inset-0 z-99999 flex items-center justify-center p-4 bg-black/50">
+      <div class="relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
+          <h3 id="modal-title" class="text-lg font-bold text-gray-900 dark:text-white"></h3>
+          <button id="modal-close" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="fill-current"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.22 7.28a1 1 0 011.42-1.42L12 10.59l4.36-4.73a1 1 0 011.42 1.42L13.41 12l4.37 4.72a1 1 0 01-1.42 1.42L12 13.41l-4.36 4.73a1 1 0 01-1.42-1.42L10.59 12 6.22 7.28z"/></svg>
+          </button>
+        </div>
+        <div id="modal-body" class="p-6 grid grid-cols-1 gap-4 sm:grid-cols-2"></div>
+      </div>
+    </div>
+  </body>
+</html>

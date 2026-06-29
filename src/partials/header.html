@@ -1,0 +1,54 @@
+<header
+  x-data="{menuToggle: false}"
+  class="sticky top-0 z-99999 flex w-full border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900"
+>
+  <div class="flex grow items-center justify-between px-4 py-3 lg:px-6">
+
+    <!-- Hamburger Toggle -->
+    <button
+      :class="sidebarToggle ? 'bg-gray-100 dark:bg-gray-800 lg:bg-transparent dark:lg:bg-transparent' : ''"
+      class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 lg:border-gray-200 dark:border-gray-800 dark:text-gray-400"
+      @click.stop="sidebarToggle = !sidebarToggle"
+    >
+      <!-- Desktop hamburger -->
+      <svg class="hidden fill-current lg:block" width="16" height="12" viewBox="0 0 16 12" fill="none">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M0.583252 1C0.583252 0.585788 0.919038 0.25 1.33325 0.25H14.6666C15.0808 0.25 15.4166 0.585786 15.4166 1C15.4166 1.41421 15.0808 1.75 14.6666 1.75L1.33325 1.75C0.919038 1.75 0.583252 1.41422 0.583252 1ZM0.583252 11C0.583252 10.5858 0.919038 10.25 1.33325 10.25L14.6666 10.25C15.0808 10.25 15.4166 10.5858 15.4166 11C15.4166 11.4142 15.0808 11.75 14.6666 11.75L1.33325 11.75C0.919038 11.75 0.583252 11.4142 0.583252 11ZM1.33325 5.25C0.919038 5.25 0.583252 5.58579 0.583252 6C0.583252 6.41421 0.919038 6.75 1.33325 6.75L7.99992 6.75C8.41413 6.75 8.74992 6.41421 8.74992 6C8.74992 5.58579 8.41413 5.25 7.99992 5.25L1.33325 5.25Z" fill=""/>
+      </svg>
+      <!-- Mobile: open -->
+      <svg :class="sidebarToggle ? 'hidden' : 'block lg:hidden'" class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M3.25 6C3.25 5.58579 3.58579 5.25 4 5.25L20 5.25C20.4142 5.25 20.75 5.58579 20.75 6C20.75 6.41421 20.4142 6.75 20 6.75L4 6.75C3.58579 6.75 3.25 6.41422 3.25 6ZM3.25 18C3.25 17.5858 3.58579 17.25 4 17.25L20 17.25C20.4142 17.25 20.75 17.5858 20.75 18C20.75 18.4142 20.4142 18.75 20 18.75L4 18.75C3.58579 18.75 3.25 18.4142 3.25 18ZM4 11.25C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75L12 12.75C12.4142 12.75 12.75 12.4142 12.75 12C12.75 11.5858 12.4142 11.25 12 11.25L4 11.25Z" fill=""/>
+      </svg>
+      <!-- Mobile: close -->
+      <svg :class="sidebarToggle ? 'block lg:hidden' : 'hidden'" class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M6.21967 7.28131C5.92678 6.98841 5.92678 6.51354 6.21967 6.22065C6.51256 5.92775 6.98744 5.92775 7.28033 6.22065L11.999 10.9393L16.7176 6.22078C17.0105 5.92789 17.4854 5.92788 17.7782 6.22078C18.0711 6.51367 18.0711 6.98855 17.7782 7.28144L13.0597 12L17.7782 16.7186C18.0711 17.0115 18.0711 17.4863 17.7782 17.7792C17.4854 18.0721 17.0105 18.0721 16.7176 17.7792L11.999 13.0607L7.28033 17.7794C6.98744 18.0722 6.51256 18.0722 6.21967 17.7794C5.92678 17.4865 5.92678 17.0116 6.21967 16.7187L10.9384 12L6.21967 7.28131Z" fill=""/>
+      </svg>
+    </button>
+
+    <!-- Logo mobile -->
+    <a href="index.html" class="lg:hidden flex items-center gap-2">
+      <div class="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-600">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 3H5C3.9 3 3 3.9 3 5V9C3 10.1 3.9 11 5 11H9C10.1 11 11 10.1 11 9V5C11 3.9 10.1 3 9 3Z" fill="white"/><path d="M19 3H15C13.9 3 13 3.9 13 5V9C13 10.1 13.9 11 15 11H19C20.1 11 21 10.1 21 9V5C21 3.9 20.1 3 19 3Z" fill="white" fill-opacity="0.7"/><path d="M9 13H5C3.9 13 3 13.9 3 15V19C3 20.1 3.9 21 5 21H9C10.1 21 11 20.1 11 19V15C11 13.9 10.1 13 9 13Z" fill="white" fill-opacity="0.7"/><path d="M19 13H15C13.9 13 13 13.9 13 15V19C13 20.1 13.9 21 15 21H19C20.1 21 21 20.1 21 19V15C21 13.9 20.1 13 19 13Z" fill="white" fill-opacity="0.4"/></svg>
+      </div>
+      <span class="text-sm font-bold text-gray-900 dark:text-white">LabControl</span>
+    </a>
+
+    <!-- Right: dark mode toggle -->
+    <div class="flex items-center gap-2">
+      <button
+        class="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 hover:bg-gray-100 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
+        @click.prevent="darkMode = !darkMode"
+        title="Alternar modo escuro"
+      >
+        <!-- Sun (dark mode: show) -->
+        <svg class="hidden dark:block fill-current" width="18" height="18" viewBox="0 0 20 20" fill="none">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M10 1.54C10.41 1.54 10.75 1.88 10.75 2.29V3.54C10.75 3.96 10.41 4.29 10 4.29C9.59 4.29 9.25 3.96 9.25 3.54V2.29C9.25 1.88 9.59 1.54 10 1.54ZM10 6.79C8.23 6.79 6.79 8.23 6.79 10C6.79 11.77 8.23 13.21 10 13.21C11.77 13.21 13.21 11.77 13.21 10C13.21 8.23 11.77 6.79 10 6.79ZM5.29 10C5.29 7.4 7.4 5.29 10 5.29C12.6 5.29 14.71 7.4 14.71 10C14.71 12.6 12.6 14.71 10 14.71C7.4 14.71 5.29 12.6 5.29 10ZM10 15.71C10.41 15.71 10.75 16.04 10.75 16.46V17.71C10.75 18.12 10.41 18.46 10 18.46C9.59 18.46 9.25 18.12 9.25 17.71V16.46C9.25 16.04 9.59 15.71 10 15.71Z" fill="currentColor"/>
+        </svg>
+        <!-- Moon (light mode: show) -->
+        <svg class="dark:hidden fill-current" width="18" height="18" viewBox="0 0 20 20" fill="none">
+          <path d="M17.45 11.97L18.18 12.16C18.27 11.84 18.13 11.5 17.84 11.33C17.55 11.16 17.19 11.19 16.94 11.42L17.45 11.97ZM8.03 2.55L8.58 3.06C8.81 2.81 8.85 2.45 8.67 2.16C8.5 1.87 8.16 1.74 7.84 1.82L8.03 2.55ZM12.92 13C9.65 13 7 10.35 7 7.09H5.5C5.5 11.18 8.82 14.5 12.92 14.5V13ZM16.94 11.42C15.89 12.4 14.47 13 12.92 13V14.5C14.87 14.5 16.64 13.75 17.97 12.52L16.94 11.42ZM16.73 11.78C15.94 14.76 13.23 16.96 10 16.96V18.46C13.93 18.46 17.22 15.79 18.18 12.16L16.73 11.78ZM10 16.96C6.16 16.96 3.04 13.84 3.04 10H1.54C1.54 14.67 5.33 18.46 10 18.46V16.96ZM3.04 10C3.04 6.77 5.24 4.06 8.22 3.27L7.84 1.82C4.22 2.78 1.54 6.07 1.54 10H3.04ZM7 7.09C7 5.53 7.6 4.11 8.58 3.06L7.48 2.04C6.25 3.36 5.5 5.13 5.5 7.09H7Z" fill="currentColor"/>
+        </svg>
+      </button>
+    </div>
+
+  </div>
+</header>

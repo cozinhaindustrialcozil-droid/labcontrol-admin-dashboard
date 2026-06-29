@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Dashboard | LabControl</title>
+  </head>
+  <body
+    x-data="{ page: 'dashboard', loaded: true, darkMode: false, stickyMenu: false, sidebarToggle: true, scrollTop: false }"
+    x-init="darkMode = JSON.parse(localStorage.getItem('darkMode')); $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <include src="./partials/preloader.html"></include>
+    <div class="flex h-screen overflow-hidden">
+      <include src="./partials/sidebar.html"></include>
+      <div class="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
+        <include src="./partials/overlay.html" />
+        <include src="./partials/header.html" />
+        <main>
+          <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+
+            <!-- Page Header compacto -->
+            <div class="mb-5 flex items-center justify-between">
+              <div>
+                <h2 class="text-xl font-semibold text-gray-800 dark:text-white/90">Dashboard</h2>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Visão geral das solicitações de testes</p>
+              </div>
+              <div class="flex items-center gap-3">
+                <span id="last-update" class="text-xs text-gray-400"></span>
+                <button id="btn-refresh" class="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                  <svg class="fill-current" width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+                  Atualizar
+                </button>
+              </div>
+            </div>
+
+            <!-- Linha 1: KPIs + Status Card -->
+            <div class="grid grid-cols-12 gap-4 md:gap-5 mb-5">
+
+              <!-- KPIs compactos (col 8) — 2 linhas x 2 colunas = 4 cards -->
+              <div class="col-span-12 xl:col-span-8 grid grid-cols-2 gap-4 md:gap-5">
+
+                <!-- Total -->
+                <div class="rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
+                  <div class="flex items-start justify-between">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-800">
+                      <svg class="fill-gray-700 dark:fill-white/80" width="20" height="20" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H18.5001C19.7427 20.75 20.7501 19.7426 20.7501 18.5V5.5C20.7501 4.25736 19.7427 3.25 18.5001 3.25H5.5ZM4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H18.5001C18.9143 4.75 19.2501 5.08579 19.2501 5.5V18.5C19.2501 18.9142 18.9143 19.25 18.5001 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V5.5ZM6.25 9.71C6.25 9.3 6.59 8.96 7 8.96L17 8.96C17.41 8.96 17.75 9.3 17.75 9.71C17.75 10.13 17.41 10.46 17 10.46L7 10.46C6.59 10.46 6.25 10.13 6.25 9.71ZM6.25 14.29C6.25 13.87 6.59 13.54 7 13.54H12C12.41 13.54 12.75 13.87 12.75 14.29C12.75 14.7 12.41 15.04 12 15.04H7C6.59 15.04 6.25 14.7 6.25 14.29Z" fill=""/></svg>
+                    </div>
+                    <span class="text-xs font-medium text-blue-600 bg-blue-50 rounded-full px-2 py-0.5 dark:bg-blue-500/15 dark:text-blue-400">2024–25</span>
+                  </div>
+                  <p class="mt-3 text-xs text-gray-500 dark:text-gray-400">Total de Solicitações</p>
+                  <h4 id="kpi-total" class="mt-1 text-3xl font-bold text-gray-800 dark:text-white/90">—</h4>
+                </div>
+
+                <!-- Taxa -->
+                <div class="rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
+                  <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-green-50 dark:bg-green-500/10">
+                    <svg class="fill-green-600 dark:fill-green-400" width="20" height="20" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill=""/></svg>
+                  </div>
+                  <p class="mt-3 text-xs text-gray-500 dark:text-gray-400">Taxa de Finalização</p>
+                  <h4 id="kpi-taxa" class="mt-1 text-3xl font-bold text-gray-800 dark:text-white/90">—%</h4>
+                  <p id="kpi-finalizadas-txt" class="mt-1 text-xs text-green-600 dark:text-green-400 font-medium">— finalizadas</p>
+                </div>
+
+                <!-- Tempo -->
+                <div class="rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
+                  <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-500/10">
+                    <svg class="fill-blue-600 dark:fill-blue-400" width="20" height="20" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C6.89137 2.75 2.75 6.89137 2.75 12C2.75 17.1086 6.89137 21.25 12 21.25C17.1086 21.25 21.25 17.1086 21.25 12C21.25 6.89137 17.1086 2.75 12 2.75ZM1.25 12C1.25 6.06294 6.06294 1.25 12 1.25C17.9371 1.25 22.75 6.06294 22.75 12C22.75 17.9371 17.9371 22.75 12 22.75C6.06294 22.75 1.25 17.9371 1.25 12ZM12 7.25C12.4142 7.25 12.75 7.58579 12.75 8V11.6893L15.0303 13.9697C15.3232 14.2626 15.3232 14.7374 15.0303 15.0303C14.7374 15.3232 14.2626 15.3232 13.9697 15.0303L11.4697 12.5303C11.329 12.3897 11.25 12.1989 11.25 12V8C11.25 7.58579 11.5858 7.25 12 7.25Z" fill=""/></svg>
+                  </div>
+                  <p class="mt-3 text-xs text-gray-500 dark:text-gray-400">Tempo Médio</p>
+                  <h4 id="kpi-tempo" class="mt-1 text-3xl font-bold text-gray-800 dark:text-white/90">—</h4>
+                  <p class="mt-1 text-xs text-gray-400">dias por solicitação</p>
+                </div>
+
+                <!-- Atrasadas -->
+                <div class="rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
+                  <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-50 dark:bg-orange-500/10">
+                    <svg class="fill-orange-500" width="20" height="20" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12 7C12.5523 7 13 7.44772 13 8V12C13 12.5523 12.5523 13 12 13C11.4477 13 11 12.5523 11 12V8C11 7.44772 11.4477 7 12 7ZM12 15C11.4477 15 11 15.4477 11 16C11 16.5523 11.4477 17 12 17C12.5523 17 13 16.5523 13 16C13 15.4477 12.5523 15 12 15Z" fill=""/></svg>
+                  </div>
+                  <p class="mt-3 text-xs text-gray-500 dark:text-gray-400">Atrasadas</p>
+                  <h4 id="kpi-atrasadas" class="mt-1 text-3xl font-bold text-orange-500">—</h4>
+                  <p class="mt-1 text-xs text-gray-400">acima do prazo</p>
+                </div>
+
+              </div>
+
+              <!-- Proporção Donut (col 4) -->
+              <div class="col-span-12 xl:col-span-4 overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
+                <h3 class="text-sm font-semibold text-gray-800 dark:text-white/90 mb-2">Por Status</h3>
+                <div id="chartStatus" class="h-[180px]"></div>
+                <div id="legend-status" class="pb-4 mt-2 space-y-1.5"></div>
+              </div>
+
+            </div>
+
+            <!-- Linha 2: Evolução + Setor -->
+            <div class="grid grid-cols-12 gap-4 md:gap-5 mb-5">
+
+              <!-- Evolução Mensal -->
+              <div class="col-span-12 xl:col-span-7 overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
+                <div class="flex items-center justify-between mb-3">
+                  <div>
+                    <h3 class="text-sm font-semibold text-gray-800 dark:text-white/90">Evolução Mensal</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Solicitações abertas por mês</p>
+                  </div>
+                </div>
+                <div id="chartEvolucao" class="h-[230px]"></div>
+              </div>
+
+              <!-- Por Prioridade -->
+              <div class="col-span-12 xl:col-span-5 overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
+                <div class="flex items-center justify-between mb-3">
+                  <div>
+                    <h3 class="text-sm font-semibold text-gray-800 dark:text-white/90">Por Prioridade</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Quantidade por urgência</p>
+                  </div>
+                </div>
+                <div id="chartPrioridade" class="h-[230px]"></div>
+              </div>
+
+            </div>
+
+            <!-- Linha 3: Setor (largura total) -->
+            <div class="mb-5 overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
+              <div class="flex items-center justify-between mb-3">
+                <div>
+                  <h3 class="text-sm font-semibold text-gray-800 dark:text-white/90">Por Setor</h3>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Solicitações por setor solicitante</p>
+                </div>
+              </div>
+              <div id="chartSetor" class="h-[200px]"></div>
+            </div>
+
+            <!-- Linha 4: Últimas Solicitações -->
+            <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+              <div class="flex items-center justify-between px-5 py-3.5 sm:px-6 border-b border-gray-100 dark:border-gray-800">
+                <div>
+                  <h3 class="text-sm font-semibold text-gray-800 dark:text-white/90">Últimas Solicitações</h3>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">8 registros mais recentes</p>
+                </div>
+                <a href="solicitacoes.html" class="text-xs font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400">Ver todas →</a>
+              </div>
+              <div class="overflow-x-auto custom-scrollbar">
+                <table class="w-full text-sm">
+                  <thead>
+                    <tr class="border-b border-gray-100 dark:border-gray-800">
+                      <th class="px-5 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wide sm:px-6">Nº</th>
+                      <th class="px-3 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wide">Cliente</th>
+                      <th class="px-3 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wide">Equipamento</th>
+                      <th class="px-3 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wide">Prioridade</th>
+                      <th class="px-3 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wide">Status</th>
+                      <th class="px-3 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wide">Responsável</th>
+                      <th class="px-3 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wide">Previsão</th>
+                    </tr>
+                  </thead>
+                  <tbody id="table-recentes">
+                    <tr><td colspan="7" class="px-5 py-6 text-center text-xs text-gray-400">Carregando dados...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

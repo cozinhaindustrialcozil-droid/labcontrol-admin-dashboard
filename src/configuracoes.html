@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Configurações | LabControl</title>
+  </head>
+  <body
+    x-data="{ page: 'configuracoes', loaded: true, darkMode: false, stickyMenu: false, sidebarToggle: true, scrollTop: false }"
+    x-init="darkMode = JSON.parse(localStorage.getItem('darkMode')); $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <include src="./partials/preloader.html"></include>
+    <div class="flex h-screen overflow-hidden">
+      <include src="./partials/sidebar.html"></include>
+      <div class="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
+        <include src="./partials/overlay.html" />
+        <include src="./partials/header.html" />
+        <main>
+          <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+
+            <div class="mb-6">
+              <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Configurações</h1>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Gerencie a integração e preferências do sistema</p>
+            </div>
+
+            <div class="grid grid-cols-12 gap-4 md:gap-6">
+              <!-- Google Sheets Config -->
+              <div class="col-span-12 lg:col-span-7">
+                <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03] mb-4">
+                  <div class="flex items-center gap-3 mb-5">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-green-50 dark:bg-green-900/20">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" class="fill-green-600"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H8v-2h4v2zm4-4H8v-2h8v2zm0-4H8V7h8v2z"/></svg>
+                    </div>
+                    <div>
+                      <h3 class="font-semibold text-gray-800 dark:text-white">Integração Google Sheets</h3>
+                      <p class="text-sm text-gray-500 dark:text-gray-400">Configure a fonte de dados principal</p>
+                    </div>
+                  </div>
+
+                  <div class="space-y-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">ID da Planilha Google Sheets</label>
+                      <input id="sheets-id" type="text" placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms" class="w-full rounded-lg border border-gray-200 bg-transparent py-2.5 px-3 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:border-gray-700 dark:text-white dark:placeholder:text-gray-500" />
+                      <p class="text-xs text-gray-400 mt-1">Encontre o ID na URL da sua planilha: docs.google.com/spreadsheets/d/<strong>ID</strong>/</p>
+                    </div>
+
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Nome da Aba (Sheet)</label>
+                      <input id="sheets-tab" type="text" placeholder="Solicitações" class="w-full rounded-lg border border-gray-200 bg-transparent py-2.5 px-3 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:border-gray-700 dark:text-white dark:placeholder:text-gray-500" />
+                    </div>
+
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Chave de API Google</label>
+                      <input id="sheets-api-key" type="password" placeholder="AIzaSy..." class="w-full rounded-lg border border-gray-200 bg-transparent py-2.5 px-3 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:border-gray-700 dark:text-white dark:placeholder:text-gray-500" />
+                      <p class="text-xs text-gray-400 mt-1">Necessário para acessar planilhas privadas via <a href="https://console.cloud.google.com" target="_blank" class="text-blue-500 hover:underline">Google Cloud Console</a></p>
+                    </div>
+
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Intervalo de Atualização</label>
+                      <select id="refresh-interval" class="w-full rounded-lg border border-gray-200 bg-transparent py-2.5 px-3 text-sm text-gray-700 focus:border-blue-400 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                        <option value="1">1 minuto</option>
+                        <option value="5" selected>5 minutos</option>
+                        <option value="10">10 minutos</option>
+                        <option value="30">30 minutos</option>
+                        <option value="60">1 hora</option>
+                      </select>
+                    </div>
+
+                    <div class="flex gap-3 pt-2">
+                      <button id="btn-testar-conexao" class="flex-1 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2.5 text-sm font-medium text-blue-700 hover:bg-blue-100 dark:border-blue-700 dark:bg-blue-900/20 dark:text-blue-400">Testar Conexão</button>
+                      <button id="btn-salvar-config" class="flex-1 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700">Salvar Configurações</button>
+                    </div>
+
+                    <div id="conexao-status" class="hidden rounded-lg p-3 text-sm"></div>
+                  </div>
+                </div>
+
+                <!-- Como conectar -->
+                <div class="rounded-2xl border border-blue-100 bg-blue-50 p-5 dark:border-blue-900/40 dark:bg-blue-900/10">
+                  <h4 class="font-semibold text-blue-800 dark:text-blue-300 mb-3">Como conectar ao Google Sheets</h4>
+                  <ol class="space-y-2 text-sm text-blue-700 dark:text-blue-400">
+                    <li class="flex gap-2"><span class="font-bold">1.</span> Acesse <a href="https://console.cloud.google.com" target="_blank" class="underline">Google Cloud Console</a> e crie um projeto</li>
+                    <li class="flex gap-2"><span class="font-bold">2.</span> Ative a API Google Sheets</li>
+                    <li class="flex gap-2"><span class="font-bold">3.</span> Crie uma Chave de API em "Credenciais"</li>
+                    <li class="flex gap-2"><span class="font-bold">4.</span> Torne a planilha pública ou compartilhe com a conta de serviço</li>
+                    <li class="flex gap-2"><span class="font-bold">5.</span> Cole o ID da planilha e a chave API nos campos acima</li>
+                  </ol>
+                </div>
+              </div>
+
+              <!-- Sistema & Status -->
+              <div class="col-span-12 lg:col-span-5 space-y-4">
+                <!-- Status Conexão -->
+                <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
+                  <h3 class="font-semibold text-gray-800 dark:text-white mb-4">Status do Sistema</h3>
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm text-gray-600 dark:text-gray-400">Fonte de Dados</span>
+                      <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                        Demo (local)
+                      </span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm text-gray-600 dark:text-gray-400">Google Sheets API</span>
+                      <span class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                        <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
+                        Não configurada
+                      </span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm text-gray-600 dark:text-gray-400">Cache Local</span>
+                      <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                        <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                        Ativo (5 min)
+                      </span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm text-gray-600 dark:text-gray-400">Total de Registros</span>
+                      <span id="cfg-total" class="text-sm font-semibold text-gray-800 dark:text-white">—</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm text-gray-600 dark:text-gray-400">Última Atualização</span>
+                      <span id="cfg-update" class="text-sm text-gray-600 dark:text-gray-400">—</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Preferências de Exibição -->
+                <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
+                  <h3 class="font-semibold text-gray-800 dark:text-white mb-4">Preferências de Exibição</h3>
+                  <div class="space-y-3">
+                    <label class="flex items-center justify-between cursor-pointer">
+                      <span class="text-sm text-gray-600 dark:text-gray-400">Alertas de atraso automáticos</span>
+                      <input type="checkbox" checked class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                    </label>
+                    <label class="flex items-center justify-between cursor-pointer">
+                      <span class="text-sm text-gray-600 dark:text-gray-400">Linhas por página (tabela)</span>
+                      <select class="rounded-lg border border-gray-200 bg-transparent py-1 px-2 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                        <option>10</option>
+                        <option selected>15</option>
+                        <option>25</option>
+                        <option>50</option>
+                      </select>
+                    </label>
+                    <label class="flex items-center justify-between cursor-pointer">
+                      <span class="text-sm text-gray-600 dark:text-gray-400">Tema escuro por padrão</span>
+                      <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Sobre o sistema -->
+                <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
+                  <h3 class="font-semibold text-gray-800 dark:text-white mb-3">Sobre o LabControl</h3>
+                  <div class="space-y-1 text-sm text-gray-500 dark:text-gray-400">
+                    <p>Versão: <span class="font-medium text-gray-700 dark:text-gray-300">1.0.0</span></p>
+                    <p>Build: <span class="font-medium text-gray-700 dark:text-gray-300">TailAdmin v2.3.0</span></p>
+                    <p>Sistema de gestão de solicitações de testes de laboratório industrial.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

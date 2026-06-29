@@ -1,0 +1,17 @@
+a planilha url: d/1FoVF80dIbuzUDvZK1fHY6JFZiEdJNgjN-VZEqisjV0I
+
+
+
+{
+  "type": "service_account",
+  "project_id": "refined-copilot-476401-r8",
+  "private_key_id": "e7d10a6bffbc1a93e52013ae5021b8799636eb6f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDnG4F3/6faYBUh\n2JfOrJnyU59p1EP7yaKXpBZCZX98r2PyBrKDMj+Y3IiEC0SWGT5ZcZFITa9marbv\n4AiI451oQ4z2kWAPklzzNQtgxWfsdSZl8tb028YXJSgAhGPmBIwbCeJs7OEH4pcO\nU6/K37x8bxDjQJK5nCHZIlVhyJyBLTeKAPcVW2W6Z2LU5tMH5HsMDOKZnR0I+rfa\nffEEyidePjQD6qYSFMA0El8c2TrcvnFoz0TTWA/sSK2RYqiHXPzglWUURCw6j33M\n/gY6Q1EPB3Qr0vyR4pOBpMUpt5UOXjwg9p/4fA2XLYi4J30tjKfnh4eamoY/Zbl7\nLe3GpFcfAgMBAAECggEAKjifNZISU1X8ZluQmGR2F4xpckciSGy09Kk4m9a5LMlK\nJBxPHqLedYnMsvrwA9AG0QZreV8f7UEPvNEcHg4fYr38kctLVmzx6EjHlF1cOBnK\n8xMjbEZ+cRoLrdSB/7LS+dmbcTTxg6RE3owxcInhgIY1+p6Ab8JzeJzKJnwlA4Ar\nSbBEm/GK8HRtk5fJ2Udoij+r0WUN53fPgmBL5jou2MXA0m5UAJEd/Zfip9kWZZGO\n/L99tuBipD9yr1T7RdeHPy8wDkIGguwoPJxOdi7xITifr8sNiF/Lq+HBrhT/VgnY\nodSNxdUFtjk+d3nxX4tqOrm7L4fAZErBIaRbVoehaQKBgQD/wRL/EMXyG5rh3ZJH\nk81A4Us47NhhdiJQFCzfNBbQ2Qfo2jkvqdlKnaHMgXAiZl97bYdrFnWSGG8/1yz8\nqJLxhRC0qG4gKJFg6vWSjuAynBDCl9p3ljn4AdpdUIiBhf37dwvQKIzZaYiFx28W\nCmTUbnXoGy7o03q5IjK5wrfAUwKBgQDnVF4QuvbYu7Ld47G8rA/VRnvUX0jtgm40\nSL9kVh51GMYinqWARCjCkSlCn/LqQ7KoRlywA8iQ7dNsAAxvXVQwHktA4tfvA5av\n+Ik7D/T0fsV/Nz66qaddxyGhQtCrFWdxnN7eNw+8GEkT8c1RMIYEIlM+nOKlpwjX\nPnU0xB9khQKBgQD8jd/BawHd1C69Lj0+W5ELqa7Llu8SR0MZCuNIwrppIHh0E9L2\n42YFDeZx+bwO7EMLspxQPox5aZGqXEU7dwgsYjed/tlI/maZa0x3nol80KqoTqZZ\nA0tZQhMtpNI3/WZShTtwIir8ov9DBC8Jd9gcAryCKR3IotWErmWjFMq5qwKBgCqm\naG1nOym8eX7lgxiJFKY6x4vhQX3gxVbIbtkd86GdPrKVU2gxqN4ui0/oU44TizXx\nOxeMqwblgkxwOdqyd1ojy7Yb3LoJjFfHV+3WxE/rq5gH5H3f16a3lyC3Q+e3G4pb\n5M9NkY4ZYCfYNgWZD6xlc7mgjT0DbeLZdhyTaEJNAoGAHeK4Uluf/LLPd+LttxbF\nFPR+p8+0xjgfRgDb5T53k9cyL+Lb9yXJFEpT0LvOycxqzyq/1kbFc2AYEn4ti2yd\nTK3ucI1DlaRFalkufkdMC9T10uQ2yHFBa0FdZavrrKe+CrAneNOrttwcbSA0QetD\n1ZMbjMoLNzlDoIuFdtOZJmQ=\n-----END PRIVATE KEY-----\n",
+  "client_email": "sistema@refined-copilot-476401-r8.iam.gserviceaccount.com",
+  "client_id": "114426900317530087031",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sistema%40refined-copilot-476401-r8.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

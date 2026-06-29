@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Indicadores | LabControl</title>
+  </head>
+  <body
+    x-data="{ page: 'indicadores', loaded: true, darkMode: false, stickyMenu: false, sidebarToggle: true, scrollTop: false }"
+    x-init="darkMode = JSON.parse(localStorage.getItem('darkMode')); $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <include src="./partials/preloader.html"></include>
+    <div class="flex h-screen overflow-hidden">
+      <include src="./partials/sidebar.html"></include>
+      <div class="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
+        <include src="./partials/overlay.html" />
+        <include src="./partials/header.html" />
+        <main>
+          <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+
+            <div class="mb-6">
+              <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Indicadores de Desempenho</h1>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Análise detalhada de performance do laboratório</p>
+            </div>
+
+            <!-- KPIs de taxa -->
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-6">
+              <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
+                <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Taxa de Finalização</p>
+                <div class="flex items-end gap-2 mt-2">
+                  <h2 id="taxa-finalizacao" class="text-3xl font-bold text-green-600 dark:text-green-400">—%</h2>
+                </div>
+                <div class="mt-3 bg-gray-100 dark:bg-gray-800 rounded-full h-2">
+                  <div id="bar-finalizacao" class="bg-green-500 rounded-full h-2" style="width:0%"></div>
+                </div>
+                <p id="txt-finalizacao" class="text-xs text-gray-400 mt-2"></p>
+              </div>
+              <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
+                <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Taxa de Atraso</p>
+                <div class="flex items-end gap-2 mt-2">
+                  <h2 id="taxa-atraso" class="text-3xl font-bold text-orange-600 dark:text-orange-400">—%</h2>
+                </div>
+                <div class="mt-3 bg-gray-100 dark:bg-gray-800 rounded-full h-2">
+                  <div id="bar-atraso" class="bg-orange-500 rounded-full h-2" style="width:0%"></div>
+                </div>
+                <p id="txt-atraso" class="text-xs text-gray-400 mt-2"></p>
+              </div>
+              <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
+                <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Tempo Médio Geral</p>
+                <div class="flex items-end gap-2 mt-2">
+                  <h2 id="tempo-medio-ind" class="text-3xl font-bold text-blue-600 dark:text-blue-400">—</h2>
+                  <span class="text-gray-400 mb-1">dias</span>
+                </div>
+                <div class="mt-3 bg-gray-100 dark:bg-gray-800 rounded-full h-2">
+                  <div class="bg-blue-500 rounded-full h-2" style="width:70%"></div>
+                </div>
+                <p id="txt-tempo-medio" class="text-xs text-gray-400 mt-2"></p>
+              </div>
+            </div>
+
+            <!-- Tops + Tempo por Responsável -->
+            <div class="grid grid-cols-12 gap-4 md:gap-6 mb-6">
+              <!-- Top Clientes -->
+              <div class="col-span-12 lg:col-span-4 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                <div class="p-5 border-b border-gray-100 dark:border-gray-800">
+                  <h3 class="text-base font-semibold text-gray-800 dark:text-white">Top 10 Clientes</h3>
+                </div>
+                <div id="top-clientes" class="p-4 space-y-2"></div>
+              </div>
+
+              <!-- Top Equipamentos -->
+              <div class="col-span-12 lg:col-span-4 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                <div class="p-5 border-b border-gray-100 dark:border-gray-800">
+                  <h3 class="text-base font-semibold text-gray-800 dark:text-white">Top 10 Equipamentos</h3>
+                </div>
+                <div id="top-equipamentos" class="p-4 space-y-2"></div>
+              </div>
+
+              <!-- Top Setores -->
+              <div class="col-span-12 lg:col-span-4 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                <div class="p-5 border-b border-gray-100 dark:border-gray-800">
+                  <h3 class="text-base font-semibold text-gray-800 dark:text-white">Top Setores Solicitantes</h3>
+                </div>
+                <div id="top-setores" class="p-4 space-y-2"></div>
+              </div>
+            </div>
+
+            <!-- Tempo por Responsável + Mensal -->
+            <div class="grid grid-cols-12 gap-4 md:gap-6">
+              <!-- Tempo por Responsável -->
+              <div class="col-span-12 lg:col-span-5 rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
+                <h3 class="text-base font-semibold text-gray-800 dark:text-white mb-4">Tempo Médio por Responsável</h3>
+                <div id="resp-list" class="space-y-3"></div>
+              </div>
+
+              <!-- Testes por mês -->
+              <div class="col-span-12 lg:col-span-7 rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
+                <h3 class="text-base font-semibold text-gray-800 dark:text-white mb-4">Quantidade de Testes por Mês</h3>
+                <div id="chartMensal" class="h-[280px]"></div>
+              </div>
+            </div>
+
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

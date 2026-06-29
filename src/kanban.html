@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Kanban | LabControl</title>
+  </head>
+  <body
+    x-data="{ page: 'kanban', loaded: true, darkMode: false, stickyMenu: false, sidebarToggle: true, scrollTop: false }"
+    x-init="darkMode = JSON.parse(localStorage.getItem('darkMode')); $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <include src="./partials/preloader.html"></include>
+    <div class="flex h-screen overflow-hidden">
+      <include src="./partials/sidebar.html"></include>
+      <div class="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
+        <include src="./partials/overlay.html" />
+        <include src="./partials/header.html" />
+        <main>
+          <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+
+            <div class="mb-6">
+              <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Quadro Kanban</h1>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Acompanhe o fluxo das solicitações por status</p>
+            </div>
+
+            <!-- Kanban Legend -->
+            <div class="mb-4 flex flex-wrap gap-2">
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700"><span class="w-2 h-2 rounded-full bg-blue-500"></span>Aberta</span>
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-yellow-200 bg-yellow-50 px-2.5 py-1 text-xs font-medium text-yellow-700"><span class="w-2 h-2 rounded-full bg-yellow-500"></span>Em análise</span>
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-xs font-medium text-orange-700"><span class="w-2 h-2 rounded-full bg-orange-500"></span>Ag. material</span>
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-purple-200 bg-purple-50 px-2.5 py-1 text-xs font-medium text-purple-700"><span class="w-2 h-2 rounded-full bg-purple-500"></span>Em teste</span>
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-cyan-200 bg-cyan-50 px-2.5 py-1 text-xs font-medium text-cyan-700"><span class="w-2 h-2 rounded-full bg-cyan-500"></span>Elab. relatório</span>
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-green-200 bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700"><span class="w-2 h-2 rounded-full bg-green-500"></span>Finalizada</span>
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-red-200 bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700"><span class="w-2 h-2 rounded-full bg-red-500"></span>Cancelada</span>
+            </div>
+
+            <!-- Kanban Board -->
+            <div id="kanban-board" class="flex gap-4 overflow-x-auto pb-4">
+              <!-- columns rendered by JS -->
+              <div class="flex items-center justify-center w-full py-12 text-gray-400">Carregando quadro...</div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>
