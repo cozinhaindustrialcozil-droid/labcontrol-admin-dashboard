@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap")
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap")
 layer(base);
 
 @import "tailwindcss";
@@ -7,7 +7,8 @@ layer(base);
 
 @theme {
   --font-*: initial;
-  --font-outfit: Outfit, sans-serif;
+  --font-outfit: "IBM Plex Sans", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
 
   --breakpoint-*: initial;
   --breakpoint-2xsm: 375px;
@@ -41,18 +42,40 @@ layer(base);
   --color-white: #ffffff;
   --color-black: #101828;
 
-  --color-brand-25: #f2f7ff;
-  --color-brand-50: #ecf3ff;
-  --color-brand-100: #dde9ff;
-  --color-brand-200: #c2d6ff;
-  --color-brand-300: #9cb9ff;
-  --color-brand-400: #7592ff;
-  --color-brand-500: #465fff;
-  --color-brand-600: #3641f5;
-  --color-brand-700: #2a31d8;
-  --color-brand-800: #252dae;
-  --color-brand-900: #262e89;
-  --color-brand-950: #161950;
+  /* NEXLAB — Azul Petróleo como cor primária */
+  --color-brand-25:  #f0f7f9;
+  --color-brand-50:  #e1eef2;
+  --color-brand-100: #c0dde5;
+  --color-brand-200: #8fbfcc;
+  --color-brand-300: #5a9db0;
+  --color-brand-400: #337d93;
+  --color-brand-500: #0F4C5C;
+  --color-brand-600: #0d4252;
+  --color-brand-700: #0a3645;
+  --color-brand-800: #0A363F;
+  --color-brand-900: #072830;
+  --color-brand-950: #041a1f;
+
+  /* NEXLAB — Âmbar Industrial como cor de destaque */
+  --color-amber-50:  #fdf8ee;
+  --color-amber-100: #faefd0;
+  --color-amber-200: #f5dc9d;
+  --color-amber-300: #efc166;
+  --color-amber-400: #e8a836;
+  --color-amber-500: #E2A634;
+  --color-amber-600: #c48a1c;
+  --color-amber-700: #9e6c15;
+  --color-amber-800: #7c5210;
+  --color-amber-900: #5e3d0c;
+
+  /* Status das solicitações — NEXLAB */
+  --color-status-aberta:     #2563EB;
+  --color-status-analise:    #EAB308;
+  --color-status-aguardando: #F97316;
+  --color-status-teste:      #9333EA;
+  --color-status-elaboracao: #06B6D4;
+  --color-status-finalizada: #16A34A;
+  --color-status-cancelada:  #DC2626;
 
   --color-blue-light-25: #f5fbff;
   --color-blue-light-50: #f0f9ff;
@@ -192,19 +215,27 @@ layer(base);
 }
 
 @utility menu-item-active {
-  @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
+  background-color: rgba(226, 166, 52, 0.18);
+  color: #E2A634;
 }
 
 @utility menu-item-inactive {
-  @apply text-gray-700 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-300;
+  color: rgba(255,255,255,0.75);
+}
+.menu-item-inactive:hover {
+  background-color: rgba(255,255,255,0.08);
+  color: #ffffff;
 }
 
 @utility menu-item-icon-active {
-  @apply fill-brand-500 dark:fill-brand-400;
+  fill: #E2A634;
 }
 
 @utility menu-item-icon-inactive {
-  @apply fill-gray-500 group-hover:fill-gray-700 dark:fill-gray-400 dark:group-hover:fill-gray-300;
+  fill: rgba(255,255,255,0.6);
+}
+.group:hover .menu-item-icon-inactive {
+  fill: #ffffff;
 }
 
 @utility menu-item-arrow {

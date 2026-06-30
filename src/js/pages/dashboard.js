@@ -3,18 +3,35 @@ import { fetchData, getDashboardStats, getStatusCounts, getSetorCounts, getPrior
 
 let chartStatus, chartSetor, chartEvolucao, chartPrioridade;
 
-const PRIO_HEX = { 'Urgente': '#F43F5E', 'Alta': '#EF4444', 'Média': '#F59E0B', 'Baixa': '#22C55E' };
+// Cores NEXLAB para gráficos
+const NEXLAB_PRIMARY = '#0F4C5C';
+const NEXLAB_AMBER   = '#E2A634';
+
+const PRIO_HEX = { 'Crítica': '#DC2626', 'Alta': '#F97316', 'Média': '#EAB308', 'Baixa': '#16A34A', 'Urgente': '#DC2626' };
 const PRIO_LABEL = { 'Urgente': 'bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400', 'Alta': 'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400', 'Média': 'bg-yellow-50 text-yellow-700 dark:bg-yellow-500/10 dark:text-yellow-400', 'Baixa': 'bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400' };
 
 function set(id, v) { const el = document.getElementById(id); if (el) el.textContent = v; }
 
-function renderKPIs(stats) {
+function renderKPIs(stats, statusCounts) {
   set('kpi-total', stats.total);
-  set('kpi-tempo', stats.tempoMedio);
+  set('kpi-atrasadas', stats.atrasadas);
+
+  // Novos KPIs por status
+  set('kpi-analise', statusCounts['Em análise'] || statusCounts['Em Análise'] || 0);
+  set('kpi-teste', statusCounts['Em teste'] || statusCounts['Em Teste'] || 0);
+  set('kpi-finalizadas', stats.finalizadas);
+  set('kpi-canceladas', statusCounts['Cancelada'] || statusCounts['Cancelado'] || 0);
+
   const taxa = stats.total > 0 ? Math.round((stats.finalizadas / stats.total) * 100) : 0;
   set('kpi-taxa', taxa + '%');
-  set('kpi-atrasadas', stats.atrasadas);
-  set('kpi-finalizadas-txt', stats.finalizadas + ' finalizadas');
+  set('kpi-finalizadas-txt', taxa + '%');
+
+  // Destaque visual no card de atrasadas
+  const cardAtrasadas = document.getElementById('card-atrasadas');
+  if (cardAtrasadas && stats.atrasadas > 0) {
+    cardAtrasadas.style.borderColor = '#F97316';
+    cardAtrasadas.style.backgroundColor = '#fff7ed';
+  }
 
   const upd = document.getElementById('last-update');
   if (upd) {
@@ -106,11 +123,11 @@ function renderSetorChart(setorData) {
 
   if (chartSetor) { chartSetor.destroy(); }
   chartSetor = new ApexCharts(document.getElementById('chartSetor'), {
-    chart: { type: 'bar', height: 220, toolbar: { show: false }, fontFamily: 'Outfit, sans-serif' },
+    chart: { type: 'bar', height: 220, toolbar: { show: false }, fontFamily: '"IBM Plex Sans", sans-serif' },
     series: [{ name: 'Solicitações', data: values }],
     xaxis: { categories: labels, labels: { style: { fontSize: '11px', colors: '#9CA3AF' } }, axisBorder: { show: false }, axisTicks: { show: false } },
     yaxis: { labels: { style: { colors: '#9CA3AF', fontSize: '11px' } } },
-    colors: ['#465FFF'],
+    colors: [NEXLAB_PRIMARY],
     plotOptions: { bar: { borderRadius: 4, columnWidth: '45%' } },
     dataLabels: { enabled: false },
     grid: { borderColor: '#F3F4F6', strokeDashArray: 4, yaxis: { lines: { show: true } }, xaxis: { lines: { show: false } } },
@@ -122,16 +139,16 @@ function renderSetorChart(setorData) {
 function renderEvolucaoChart(evolucao) {
   if (chartEvolucao) { chartEvolucao.destroy(); }
   chartEvolucao = new ApexCharts(document.getElementById('chartEvolucao'), {
-    chart: { type: 'area', height: 230, toolbar: { show: false }, fontFamily: 'Outfit, sans-serif' },
+    chart: { type: 'area', height: 230, toolbar: { show: false }, fontFamily: '"IBM Plex Sans", sans-serif' },
     series: [{ name: 'Solicitações', data: evolucao.values }],
     xaxis: { categories: evolucao.labels, labels: { style: { fontSize: '11px', colors: '#9CA3AF' } }, axisBorder: { show: false }, axisTicks: { show: false } },
     yaxis: { labels: { style: { colors: '#9CA3AF', fontSize: '11px' } }, min: 0 },
-    colors: ['#465FFF'],
-    fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.3, opacityTo: 0.02, stops: [0, 100] } },
+    colors: [NEXLAB_PRIMARY],
+    fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.25, opacityTo: 0.02, stops: [0, 100] } },
     stroke: { curve: 'smooth', width: 2 },
     grid: { borderColor: '#F3F4F6', strokeDashArray: 4 },
     dataLabels: { enabled: false },
-    markers: { size: 3, colors: ['#465FFF'], strokeColors: '#fff', strokeWidth: 2 },
+    markers: { size: 3, colors: [NEXLAB_PRIMARY], strokeColors: '#fff', strokeWidth: 2 },
     tooltip: { y: { formatter: (v) => `${v} solicitações` }, theme: 'light' },
   });
   chartEvolucao.render();
@@ -186,8 +203,9 @@ function renderTabelaRecentes(data) {
 
 async function renderDashboard(data) {
   const stats = getDashboardStats(data);
-  renderKPIs(stats);
-  renderStatusList(getStatusCounts(data));
+  const statusCounts = getStatusCounts(data);
+  renderKPIs(stats, statusCounts);
+  renderStatusList(statusCounts);
   renderStatusChart(getStatusCounts(data));
   renderSetorChart(getSetorCounts(data));
   renderEvolucaoChart(getEvolucaoMensal(data));
