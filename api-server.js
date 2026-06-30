@@ -29,12 +29,20 @@ function getCredentials() {
 
 async function getSheetData() {
   const creds = getCredentials();
-  const auth = new google.auth.JWT(
-    creds.client_email,
-    null,
-    creds.private_key,
-    ['https://www.googleapis.com/auth/spreadsheets.readonly']
-  );
+
+  // Monta o objeto completo de service account para GoogleAuth
+  const serviceAccountJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON
+    ? JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON)
+    : {
+        type: 'service_account',
+        client_email: creds.client_email,
+        private_key: creds.private_key,
+      };
+
+  const auth = new google.auth.GoogleAuth({
+    credentials: serviceAccountJson,
+    scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+  });
 
   const sheets = google.sheets({ version: 'v4', auth });
 
