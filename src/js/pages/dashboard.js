@@ -1,5 +1,5 @@
 import ApexCharts from 'apexcharts';
-import { fetchData, getDashboardStats, getStatusCounts, getSetorCounts, getPrioridadeCounts, getEvolucaoMensal, STATUS_COLORS, formatDate, isAtrasada, startAutoRefresh } from '../lab-data.js';
+import { fetchData, getDashboardStats, getStatusCounts, getSetorCounts, getPrioridadeCounts, getEvolucaoMensal, STATUS_COLORS, formatDate, isAtrasada, startAutoRefresh, syncStatus } from '../lab-data.js';
 
 let chartStatus, chartSetor, chartEvolucao, chartPrioridade;
 
@@ -17,7 +17,15 @@ function renderKPIs(stats) {
   set('kpi-finalizadas-txt', stats.finalizadas + ' finalizadas');
 
   const upd = document.getElementById('last-update');
-  if (upd) upd.textContent = 'Atualizado: ' + new Date().toLocaleTimeString('pt-BR');
+  if (upd) {
+    const hora = new Date().toLocaleTimeString('pt-BR');
+    const fonte = syncStatus.source === 'google_sheets' ? ' · Google Sheets' : syncStatus.source === 'api' ? ' · API' : syncStatus.ok === false ? ' · dados locais' : '';
+    upd.textContent = `Atualizado: ${hora}${fonte}`;
+    upd.title = syncStatus.error ? `Erro: ${syncStatus.error}` : `Fonte: ${syncStatus.source || 'cache local'}`;
+    upd.className = syncStatus.ok === false
+      ? 'text-xs text-orange-500'
+      : 'text-xs text-gray-400';
+  }
 }
 
 function renderStatusList(statusCounts) {

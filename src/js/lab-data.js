@@ -8,6 +8,9 @@ const LAB_DATA_KEY = 'labcontrol_data';
 const LAB_DATA_TIMESTAMP_KEY = 'labcontrol_timestamp';
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
 
+// URL da API — em dev usa proxy do webpack (/api/...), em produção usa rota relativa
+const API_URL = '/api/solicitacoes';
+
 export const STATUS_COLORS = {
   'Aberta':                     { bg: 'bg-blue-100',   text: 'text-blue-700',   dot: 'bg-blue-500',   hex: '#3B82F6' },
   'Em análise':                 { bg: 'bg-yellow-100', text: 'text-yellow-700', dot: 'bg-yellow-500', hex: '#EAB308' },
@@ -62,10 +65,19 @@ let lastFetch = null;
 let updateInterval = null;
 let updateCallbacks = [];
 
-function simulateGoogleSheetsData() {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve([...SAMPLE_DATA]), 300);
-  });
+// Status de sincronização exposto para os componentes de UI
+export let syncStatus = { ok: null, updatedAt: null, source: null, error: null };
+
+async function fetchFromAPI() {
+  const response = await fetch(API_URL);
+  if (!response.ok) {
+    const errBody = await response.json().catch(() => ({}));
+    throw new Error(errBody.error || `HTTP ${response.status}`);
+  }
+  const json = await response.json();
+  if (!json.ok) throw new Error(json.error || 'Resposta inválida da API');
+  syncStatus = { ok: true, updatedAt: json.updatedAt, source: json.source || 'api', error: null };
+  return json.data;
 }
 
 export async function fetchData(forceRefresh = false) {
@@ -74,17 +86,28 @@ export async function fetchData(forceRefresh = false) {
     return cachedData;
   }
   try {
-    const data = await simulateGoogleSheetsData();
+    const data = await fetchFromAPI();
     cachedData = data;
     lastFetch = now;
-    try { localStorage.setItem(LAB_DATA_KEY, JSON.stringify(data)); localStorage.setItem(LAB_DATA_TIMESTAMP_KEY, String(now)); } catch(e){}
+    try {
+      localStorage.setItem(LAB_DATA_KEY, JSON.stringify(data));
+      localStorage.setItem(LAB_DATA_TIMESTAMP_KEY, String(now));
+    } catch(e) {}
     return data;
   } catch (err) {
-    console.error('[LabControl] Erro ao buscar dados:', err);
+    console.error('[LabControl] Erro ao buscar dados da API:', err.message);
+    syncStatus = { ok: false, updatedAt: null, source: null, error: err.message };
+    // Tenta cache local primeiro
     try {
       const saved = localStorage.getItem(LAB_DATA_KEY);
-      if (saved) return JSON.parse(saved);
-    } catch(e){}
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        console.warn('[LabControl] Usando cache local por falha na API.');
+        return parsed;
+      }
+    } catch(e) {}
+    // Último recurso: dados de exemplo
+    console.warn('[LabControl] Usando dados de exemplo (API indisponível).');
     return SAMPLE_DATA;
   }
 }
