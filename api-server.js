@@ -11,14 +11,28 @@ app.use((req, res, next) => {
 });
 
 const SHEET_ID = process.env.GOOGLE_SHEET_ID;
-const CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL;
-const PRIVATE_KEY = (process.env.GOOGLE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
+
+// Suporta tanto JSON completo (GOOGLE_SERVICE_ACCOUNT_JSON) quanto vars separadas
+function getCredentials() {
+  if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
+    try {
+      return JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
+    } catch(e) {
+      console.error('[API] Erro ao parsear GOOGLE_SERVICE_ACCOUNT_JSON:', e.message);
+    }
+  }
+  return {
+    client_email: process.env.GOOGLE_CLIENT_EMAIL,
+    private_key: (process.env.GOOGLE_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
+  };
+}
 
 async function getSheetData() {
+  const creds = getCredentials();
   const auth = new google.auth.JWT(
-    CLIENT_EMAIL,
+    creds.client_email,
     null,
-    PRIVATE_KEY,
+    creds.private_key,
     ['https://www.googleapis.com/auth/spreadsheets.readonly']
   );
 
@@ -67,7 +81,8 @@ async function getSheetData() {
 
 app.get('/api/solicitacoes', async (req, res) => {
   try {
-    if (!SHEET_ID || !CLIENT_EMAIL || !PRIVATE_KEY) {
+    const creds = getCredentials();
+    if (!SHEET_ID || !creds.client_email || !creds.private_key) {
       return res.status(500).json({ error: 'Credenciais do Google Sheets não configuradas.' });
     }
     const data = await getSheetData();
