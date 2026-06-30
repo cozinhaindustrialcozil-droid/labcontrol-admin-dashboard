@@ -12,32 +12,43 @@ app.use((req, res, next) => {
 
 const SHEET_ID = process.env.GOOGLE_SHEET_ID;
 
+// Normaliza a private_key: converte \\n literais em \n reais
+function normalizePrivateKey(key) {
+  if (!key) return '';
+  // Se já tem newlines reais e header PEM, está ok
+  if (key.includes('\n') && key.includes('-----BEGIN')) return key;
+  // Converte \\n literal → \n real
+  return key.replace(/\\n/g, '\n');
+}
+
 // Suporta tanto JSON completo (GOOGLE_SERVICE_ACCOUNT_JSON) quanto vars separadas
 function getCredentials() {
   if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
     try {
-      return JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
+      const raw = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
+      const creds = JSON.parse(raw);
+      // Garante que a private_key tem \n reais mesmo vindo de env var
+      creds.private_key = normalizePrivateKey(creds.private_key);
+      return creds;
     } catch(e) {
       console.error('[API] Erro ao parsear GOOGLE_SERVICE_ACCOUNT_JSON:', e.message);
     }
   }
   return {
     client_email: process.env.GOOGLE_CLIENT_EMAIL,
-    private_key: (process.env.GOOGLE_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
+    private_key: normalizePrivateKey(process.env.GOOGLE_PRIVATE_KEY || ''),
   };
 }
 
 async function getSheetData() {
+  // getCredentials já normaliza private_key
   const creds = getCredentials();
 
-  // Monta o objeto completo de service account para GoogleAuth
-  const serviceAccountJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON
-    ? JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON)
-    : {
-        type: 'service_account',
-        client_email: creds.client_email,
-        private_key: creds.private_key,
-      };
+  const serviceAccountJson = {
+    type: 'service_account',
+    ...creds,
+    private_key: creds.private_key,
+  };
 
   const auth = new google.auth.GoogleAuth({
     credentials: serviceAccountJson,
